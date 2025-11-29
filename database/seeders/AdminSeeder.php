@@ -17,9 +17,9 @@ class AdminSeeder extends Seeder
     public function run()
     {
         Admin::factory()->create([
-            'nama'      => 'Adit Mini',
+            'nama'      => 'Admin',
             'username'  => 'admin',
-            'password'  => Hash::make('super-rahasia'),
+            'password'  => Hash::make('admin'),
         ]);
     }
 }

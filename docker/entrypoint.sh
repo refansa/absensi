@@ -71,6 +71,18 @@ fi
 echo "🔄 Running database migrations..."
 php artisan migrate --force --no-interaction
 
+# Seed admin user if it doesn't exist
+echo "👤 Checking admin user..."
+ADMIN_EXISTS=$(php artisan tinker --execute="echo App\Models\Admin::where('username', 'admin')->exists() ? '1' : '0';")
+if [ "$ADMIN_EXISTS" = "0" ]; then
+    echo "📝 Creating default admin user..."
+    php artisan db:seed --class=AdminSeeder --force --no-interaction
+    echo "✅ Admin user created (username: admin, password: admin)"
+    echo "⚠️  IMPORTANT: Change the admin password after first login!"
+else
+    echo "✅ Admin user already exists"
+fi
+
 # Optimize for production
 echo "⚡ Optimizing application for production..."
 php artisan config:cache

@@ -81,9 +81,15 @@ docker-compose up -d --build
    > - `.env` file is created from `.env.production.example` if it doesn't exist
    > - `APP_KEY` is auto-generated if not set
    > - Database is created and migrated
+   > - **Default admin user created** (username: `admin`, password: `admin`)
    > - Application is optimized for production
 
 2. **Access:** http://localhost:8000
+
+3. **Login with default admin credentials:**
+   - **Username:** `admin`
+   - **Password:** `admin`
+   - ⚠️ **Change the password immediately after first login!**
 
 > **💡 Pro Tip:** To persist the auto-generated `.env` and `APP_KEY`, copy it from the container:
 > ```bash
