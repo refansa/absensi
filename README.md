@@ -72,24 +72,29 @@ docker-compose up -d --build
 
 **Quick Start:**
 
-1. **Create production environment file:**
-   ```bash
-   cp .env.production.example .env
-   ```
-   
-   > **Note:** You can customize `APP_NAME`, `APP_URL`, and other settings in `.env`.
-   > The `APP_KEY` will be automatically generated on first run if not provided.
-
-2. **Deploy:**
+1. **Deploy (that's it! 🚀):**
    ```bash
    docker-compose up -d --build
    ```
+   
+   > **What happens automatically:**
+   > - `.env` file is created from `.env.production.example` if it doesn't exist
+   > - `APP_KEY` is auto-generated if not set
+   > - Database is created and migrated
+   > - Application is optimized for production
 
-3. **Access:** http://localhost:8000
+2. **Access:** http://localhost:8000
 
-> **💡 Pro Tip:** To persist the auto-generated APP_KEY, copy it from the container:
+> **💡 Pro Tip:** To persist the auto-generated `.env` and `APP_KEY`, copy it from the container:
 > ```bash
-> docker cp absensi_app:/var/www/html/.env ./.env.production
+> docker cp absensi-app:/var/www/html/.env ./.env.production
+> ```
+>
+> **🎨 Customize Settings (Optional):** Create a `.env` file before running to customize `APP_NAME`, `APP_URL`, etc.
+> ```bash
+> cp .env.production.example .env
+> # Edit .env with your settings
+> docker-compose up -d --build
 > ```
 
 For detailed production deployment instructions, see **[PRODUCTION.md](PRODUCTION.md)**
@@ -172,7 +177,7 @@ git pull
 docker-compose up -d --build
 
 # Backup database
-docker cp absensi_app:/var/www/html/database/database.sqlite ./backup.sqlite
+docker cp absensi-app:/var/www/html/database/database.sqlite ./backup.sqlite
 
 # View container health
 docker-compose ps
