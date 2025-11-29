@@ -59,9 +59,8 @@ COPY . /var/www/html
 # Copy built assets from node-builder
 COPY --from=node-builder /app/public/build /var/www/html/public/build
 
-# Install PHP dependencies (production only, no dev dependencies)
+# Install PHP dependencies
 RUN composer install \
-    --no-dev \
     --no-interaction \
     --optimize-autoloader \
     --no-scripts \
