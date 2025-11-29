@@ -48,11 +48,15 @@ if [ -z "$APP_KEY" ] || [ "$APP_KEY" = "base64:YOUR_APP_KEY_HERE" ]; then
     # Generate APP_KEY using Laravel's artisan command
     php artisan key:generate --force --no-interaction
     
-    echo "✅ APP_KEY generated successfully!"
+    # Read the generated key from .env and export it to environment
+    GENERATED_KEY=$(grep "^APP_KEY=" /var/www/html/.env | cut -d '=' -f2-)
+    export APP_KEY="$GENERATED_KEY"
+    
+    echo "✅ APP_KEY generated and loaded: ${APP_KEY:0:20}..."
     echo "⚠️  IMPORTANT: Copy the .env file from the container to persist this key!"
     echo "    Run: docker cp absensi-app:/var/www/html/.env ./.env.production"
 else
-    echo "✅ APP_KEY is already set"
+    echo "✅ APP_KEY is already set: ${APP_KEY:0:20}..."
 fi
 
 # Ensure database file exists
