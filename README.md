@@ -76,19 +76,21 @@ docker-compose up -d --build
    ```bash
    cp .env.production.example .env
    ```
+   
+   > **Note:** You can customize `APP_NAME`, `APP_URL`, and other settings in `.env`.
+   > The `APP_KEY` will be automatically generated on first run if not provided.
 
-2. **Generate APP_KEY:**
-   ```bash
-   docker run --rm php:8.4-cli php -r "echo 'base64:' . base64_encode(random_bytes(32)) . PHP_EOL;"
-   ```
-   Copy the output and update `APP_KEY` in `.env`
-
-3. **Deploy:**
+2. **Deploy:**
    ```bash
    docker-compose up -d --build
    ```
 
-4. **Access:** http://localhost
+3. **Access:** http://localhost:8000
+
+> **💡 Pro Tip:** To persist the auto-generated APP_KEY, copy it from the container:
+> ```bash
+> docker cp absensi_app:/var/www/html/.env ./.env.production
+> ```
 
 For detailed production deployment instructions, see **[PRODUCTION.md](PRODUCTION.md)**
 
