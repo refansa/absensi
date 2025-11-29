@@ -7,7 +7,6 @@
         <a class="text-blue-700 underline" href="{{ route('dashboard') }}">Dashboard</a>
         <a class="text-blue-700 underline" href="{{ route('siswa.index') }}">Siswa</a>
         <a class="text-blue-700 underline" href="{{ route('absensi.index') }}">Absen</a>
-        <a class="text-blue-700 underline" href="{{ route('stub') }}">Laporan Absensi</a>
       </div>
     </nav>
     <hr class="border-black border" />

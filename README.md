@@ -4,78 +4,148 @@ A web-based attendance system built with Laravel.
 
 ## 🚀 Getting Started
 
-This project uses Docker to simplify the development environment. Follow the steps below to get the project running.
-
 ### Prerequisites
 
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
+- **Docker** (if using Docker setup)
+- **PHP 8.2+** (if running locally)
+- **Composer**
+- **Node.js** & **npm**
+- **Web Server** (Nginx/Apache)
 
-### Installation & Running
+## 📦 Installation
 
-1.  **Clone the repository** (if you haven't already):
-    ```bash
-    git clone https://github.com/refansa/absensi.git
-    cd absensi
-    ```
+### Option 1: Local Setup
 
-2.  **Setup Environment Variables**:
-    Copy the Docker-specific environment file to `.env`:
-    ```bash
-    cp .env.docker .env
-    ```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/refansa/absensi.git
+   cd absensi
+   ```
 
-3.  **Start the Containers**:
-    Build and start the services (App, Web, Database, Redis, Mailpit):
-    ```bash
-    docker-compose up -d --build
-    ```
+2. **Install dependencies**:
+   ```bash
+   composer install
+   npm install
+   ```
 
-4.  **Install Dependencies**:
-    Install PHP dependencies via Composer inside the container:
-    ```bash
-    docker-compose exec app composer install
-    ```
+3. **Setup environment**:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-5.  **Run Migrations**:
-    Set up the database tables:
-    ```bash
-    docker-compose exec app php artisan migrate
-    ```
+4. **Setup database**:
+   SQLite is used by default. The database file will be created automatically.
+   ```bash
+   php artisan migrate
+   php artisan db:seed
+   ```
 
-6.  **Access the Application**:
-    - **Web App**: [http://localhost:8000](http://localhost:8000)
-    - **Mailpit (Email Testing)**: [http://localhost:8025](http://localhost:8025)
+5. **Build assets**:
+   ```bash
+   npm run build
+   ```
 
-## 📂 Project Structure (Traversing the Project)
+6. **Serve the application**:
+   ```bash
+   php artisan serve
+   ```
+   Access at: http://localhost:8000
+
+### Option 2: Docker Setup
+
+For detailed Docker instructions, see [README_DOCKER.md](README_DOCKER.md)
+
+**Quick Start:**
+
+1. **Build the Docker image**:
+   ```bash
+   docker build -t absensi-app .
+   ```
+
+2. **Run the container**:
+   ```bash
+   # Windows PowerShell
+   docker run -d --name absensi -p 9000:9000 -v ${PWD}:/var/www/html absensi-app
+   
+   # Linux/Mac
+   docker run -d --name absensi -p 9000:9000 -v "$(pwd):/var/www/html" absensi-app
+   ```
+
+3. **Configure your web server** to point to `127.0.0.1:9000` for PHP-FPM
+
+4. **Run migrations**:
+   ```bash
+   docker exec absensi php artisan migrate
+   docker exec absensi php artisan db:seed
+   ```
+
+## 📂 Project Structure
 
 This project follows the standard Laravel directory structure:
 
--   **`app/`**: Contains the core code of the application (Models, Controllers, etc.).
--   **`routes/`**: Defines the application routes (`web.php`, `api.php`).
--   **`resources/views/`**: Contains the Blade templates for the frontend.
--   **`database/`**: Contains database migrations and seeders.
--   **`docker/`**: Contains Docker configuration files (e.g., Nginx config).
--   **`public/`**: The entry point for the web server (`index.php`) and static assets.
-
-### Docker Services
-
--   **App**: PHP 8.2 FPM container serving the Laravel application.
--   **Web**: Nginx web server handling HTTP requests.
--   **DB**: MySQL 8.0 database.
--   **Redis**: In-memory data structure store, used for caching and queues.
--   **Mailpit**: A tool for testing emails locally without sending them to real addresses.
+- **`app/`**: Core application code (Models, Controllers, Middleware, etc.)
+- **`routes/`**: Application routes (`web.php`, `api.php`)
+- **`resources/views/`**: Blade templates for the frontend
+- **`database/`**: Database migrations, seeders, and factories
+- **`public/`**: Web server document root and static assets
+- **`config/`**: Application configuration files
 
 ## 🛠 Tech Stack
 
--   **Framework**: [Laravel](https://laravel.com/)
--   **Frontend**: Blade Templates, [Tailwind CSS](https://tailwindcss.com/), [Vite](https://vitejs.dev/)
--   **Database**: MySQL
--   **Cache/Queue**: Redis
+- **Framework**: [Laravel 12](https://laravel.com/)
+- **PHP**: 8.2
+- **Frontend**: Blade Templates, [Tailwind CSS](https://tailwindcss.com/), [Vite](https://vitejs.dev/)
+- **Database**: SQLite (default), compatible with MySQL/PostgreSQL
+- **Build Tool**: Vite
+
+## 🔧 Development Commands
+
+```bash
+# Run development server
+php artisan serve
+
+# Run migrations
+php artisan migrate
+
+# Seed database
+php artisan db:seed
+
+# Clear cache
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+
+# Build assets for production
+npm run build
+
+# Watch assets during development
+npm run dev
+```
+
+## � Docker Commands
+
+```bash
+# Start container
+docker start absensi
+
+# Stop container
+docker stop absensi
+
+# View logs
+docker logs -f absensi
+
+# Run artisan commands
+docker exec absensi php artisan [command]
+
+# Access container shell
+docker exec -it absensi bash
+```
 
 ## 👥 Contributors
 
--   **Refansa**
+- **Refansa** - [@refansa](https://github.com/refansa)
 
 ## 📄 License
 

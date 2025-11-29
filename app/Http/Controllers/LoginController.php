@@ -28,6 +28,11 @@ class LoginController extends Controller
                 'alert-content' => 'Login berhasil!',
                 'alert-type'    => 'success',
             ]);
+        } else {
+            return redirect()->back()->with([
+                'alert-content' => 'Login gagal!',
+                'alert-type'    => 'error',
+            ]);
         }
     }
 }
