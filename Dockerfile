@@ -20,6 +20,14 @@ RUN apk add --no-cache \
     nginx \
     supervisor \
     sqlite \
+    libpng \
+    libjpeg-turbo \
+    libwebp \
+    freetype \
+    libzip \
+    oniguruma \
+    && apk add --no-cache --virtual .build-deps \
+    $PHPIZE_DEPS \
     libpng-dev \
     libjpeg-turbo-dev \
     libwebp-dev \
@@ -36,7 +44,7 @@ RUN apk add --no-cache \
         gd \
         zip \
         opcache \
-    && apk del --no-cache ${PHPIZE_DEPS} \
+    && apk del --no-cache .build-deps \
     && rm -rf /var/cache/apk/*
 
 # Install Composer
