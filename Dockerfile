@@ -1,5 +1,5 @@
 # Laravel Dockerfile with SQLite
-FROM php:8.2-fpm
+FROM php:8.4-fpm
 
 WORKDIR /var/www/html
 
