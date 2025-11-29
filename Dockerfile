@@ -15,25 +15,28 @@ FROM php:8.4-fpm-alpine
 
 WORKDIR /var/www/html
 
-# Install system dependencies and PHP extensions
-RUN apk add --no-cache \
-    nginx \
-    supervisor \
-    sqlite \
-    libpng \
-    libjpeg-turbo \
-    libwebp \
-    freetype \
-    libzip \
-    oniguruma \
-    && apk add --no-cache --virtual .build-deps \
-    $PHPIZE_DEPS \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libwebp-dev \
-    freetype-dev \
-    libzip-dev \
-    oniguruma-dev \
+# Install build dependencies as virtual package
+RUN apk add --no-cache --virtual .build-deps \
+        $PHPIZE_DEPS \
+        sqlite-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        libwebp-dev \
+        freetype-dev \
+        libzip-dev \
+        oniguruma-dev \
+    # Install runtime dependencies and system packages
+    && apk add --no-cache \
+        nginx \
+        supervisor \
+        sqlite \
+        libpng \
+        libjpeg-turbo \
+        libwebp \
+        freetype \
+        libzip \
+        oniguruma \
+    # Configure and install PHP extensions
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) \
         pdo_sqlite \
@@ -44,7 +47,8 @@ RUN apk add --no-cache \
         gd \
         zip \
         opcache \
-    && apk del --no-cache .build-deps \
+    # Cleanup build dependencies
+    && apk del .build-deps \
     && rm -rf /var/cache/apk/*
 
 # Install Composer
