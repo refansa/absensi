@@ -89,5 +89,29 @@ chmod 664 /var/www/html/database/database.sqlite
 echo "✅ Application ready!"
 echo "========================================"
 
-# Start supervisor to manage PHP-FPM and Nginx
-exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+# Function to handle shutdown gracefully
+shutdown() {
+    echo "🛑 Shutting down gracefully..."
+    echo "Stopping PHP-FPM..."
+    kill -TERM $PHP_FPM_PID 2>/dev/null
+    echo "Stopping Nginx..."
+    nginx -s quit
+    wait $PHP_FPM_PID
+    echo "✅ Shutdown complete"
+    exit 0
+}
+
+# Trap SIGTERM and SIGINT for graceful shutdown
+trap shutdown SIGTERM SIGINT
+
+# Start PHP-FPM in the background
+echo "🚀 Starting PHP-FPM..."
+php-fpm -F &
+PHP_FPM_PID=$!
+
+# Give PHP-FPM a moment to start
+sleep 2
+
+# Start Nginx in the foreground
+echo "🚀 Starting Nginx..."
+exec nginx -g 'daemon off;'

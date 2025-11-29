@@ -119,7 +119,6 @@ This project follows the standard Laravel directory structure:
 - **Build Tool**: Vite
 - **Containerization**: Docker & Docker Compose (Alpine Linux)
 - **Web Server**: Nginx
-- **Process Manager**: Supervisor
 
 ## 🔧 Development Commands
 

@@ -28,7 +28,6 @@ RUN apk add --no-cache --virtual .build-deps \
     # Install runtime dependencies and system packages
     && apk add --no-cache \
         nginx \
-        supervisor \
         sqlite \
         libpng \
         libjpeg-turbo \
@@ -79,7 +78,6 @@ RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
 
 # Copy configuration files
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 
