@@ -52,33 +52,45 @@ A web-based attendance system built with Laravel.
    ```
    Access at: http://localhost:8000
 
-### Option 2: Docker Setup
+### Option 2: Docker Setup (Production-Ready) 🐳
 
-For detailed Docker instructions, see [README_DOCKER.md](README_DOCKER.md)
+**One-command production deployment with SQLite database:**
+
+```bash
+docker-compose up -d --build
+```
+
+**What's included:**
+- ✅ Production-optimized Alpine Linux image (~150MB)
+- ✅ PHP 8.4-FPM with OPcache enabled
+- ✅ Nginx web server with gzip compression
+- ✅ SQLite database with persistent storage
+- ✅ Automatic database migrations
+- ✅ Pre-built assets (Vite)
+- ✅ Auto-restart on failure
+- ✅ Health checks
 
 **Quick Start:**
 
-1. **Build the Docker image**:
+1. **Create production environment file:**
    ```bash
-   docker build -t absensi-app .
+   cp .env.production.example .env
    ```
 
-2. **Run the container**:
+2. **Generate APP_KEY:**
    ```bash
-   # Windows PowerShell
-   docker run -d --name absensi -p 9000:9000 -v ${PWD}:/var/www/html absensi-app
-   
-   # Linux/Mac
-   docker run -d --name absensi -p 9000:9000 -v "$(pwd):/var/www/html" absensi-app
+   docker run --rm php:8.4-cli php -r "echo 'base64:' . base64_encode(random_bytes(32)) . PHP_EOL;"
+   ```
+   Copy the output and update `APP_KEY` in `.env`
+
+3. **Deploy:**
+   ```bash
+   docker-compose up -d --build
    ```
 
-3. **Configure your web server** to point to `127.0.0.1:9000` for PHP-FPM
+4. **Access:** http://localhost
 
-4. **Run migrations**:
-   ```bash
-   docker exec absensi php artisan migrate
-   docker exec absensi php artisan db:seed
-   ```
+For detailed production deployment instructions, see **[PRODUCTION.md](PRODUCTION.md)**
 
 ## 📂 Project Structure
 
@@ -94,10 +106,13 @@ This project follows the standard Laravel directory structure:
 ## 🛠 Tech Stack
 
 - **Framework**: [Laravel 12](https://laravel.com/)
-- **PHP**: 8.2
+- **PHP**: 8.4
 - **Frontend**: Blade Templates, [Tailwind CSS](https://tailwindcss.com/), [Vite](https://vitejs.dev/)
-- **Database**: SQLite (default), compatible with MySQL/PostgreSQL
+- **Database**: SQLite (production & development)
 - **Build Tool**: Vite
+- **Containerization**: Docker & Docker Compose (Alpine Linux)
+- **Web Server**: Nginx
+- **Process Manager**: Supervisor
 
 ## 🔧 Development Commands
 
@@ -124,24 +139,44 @@ npm run build
 npm run dev
 ```
 
-## � Docker Commands
+## 🐳 Docker Commands (Production)
 
 ```bash
-# Start container
-docker start absensi
+# Deploy application
+docker-compose up -d --build
 
-# Stop container
-docker stop absensi
+# Stop application
+docker-compose down
 
 # View logs
-docker logs -f absensi
+docker-compose logs -f app
 
 # Run artisan commands
-docker exec absensi php artisan [command]
+docker-compose exec app php artisan [command]
+
+# Examples:
+docker-compose exec app php artisan db:seed
+docker-compose exec app php artisan cache:clear
+docker-compose exec app php artisan optimize
 
 # Access container shell
-docker exec -it absensi bash
+docker-compose exec app sh
+
+# Restart application
+docker-compose restart app
+
+# Update application (after code changes)
+git pull
+docker-compose up -d --build
+
+# Backup database
+docker cp absensi_app:/var/www/html/database/database.sqlite ./backup.sqlite
+
+# View container health
+docker-compose ps
 ```
+
+For complete production deployment guide, see **[PRODUCTION.md](PRODUCTION.md)**
 
 ## 👥 Contributors
 
